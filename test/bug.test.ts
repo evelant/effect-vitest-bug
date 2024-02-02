@@ -1,7 +1,7 @@
-import { Effect, TestContext } from "effect";
-import * as it from "effect-test/utils/extend";
+import { Effect, TestContext, pipe } from "effect";
+import * as effectIt from "effect-test/utils/extend";
 
-import { afterEach, assert, beforeEach, describe, vitest } from "vitest";
+import { afterEach, assert, beforeEach, describe, it, vitest } from "vitest";
 
 describe("bug", () => {
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe("bug", () => {
   afterEach(() => {
     vitest.useRealTimers();
   });
-  it.effect(`initial test`, () =>
+  effectIt.effect(`initial test`, () =>
     Effect.gen(function* (_) {
       assert.deepEqual(["123"], ["234"]);
 
@@ -19,4 +19,12 @@ describe("bug", () => {
       // assert.strictEqual(actual, expected)
     }).pipe(Effect.provide(TestContext.TestContext))
   );
+  it(`test2`, async () => {
+    await pipe(
+      Effect.gen(function* (_) {
+        assert.deepEqual(["123"], ["234"]);
+      }),
+      Effect.runPromise
+    );
+  });
 });
