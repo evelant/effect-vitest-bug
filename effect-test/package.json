@@ -1,0 +1,38 @@
+{
+    "dependencies": {},
+    "devDependencies": {},
+    "exports": {
+        "./*": "./src/*"
+    },
+    "name": "effect-test",
+    "private": true,
+    "scripts": {
+        "clean": "rm -rf build && rm -rf .tsbuildinfo",
+        "build": "wireit",
+        "lint": "eslint --ext .ts,.tsx src/",
+        "lint:fix": "bun lint --fix"
+    },
+    "version": "5.2.18",
+    "wireit": {
+        "build": {
+            "command": "tsc -p    ./tsconfig.json",
+            "dependencies": [
+                "../taskhero-shared:build"
+            ],
+            "clean": "if-file-deleted",
+            "files": [
+                "src/**/*.ts",
+                "tsconfig.build.json",
+                "tsconfig.json",
+                "../../tsconfig.base.json"
+            ],
+            "output": [
+                "build/**",
+                "tsconfig.build.tsbuildinfo"
+            ],
+            "packageLocks": [
+                "bun.lockb"
+            ]
+        }
+    }
+}
