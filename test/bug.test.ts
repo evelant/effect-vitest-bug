@@ -1,25 +1,21 @@
-import { Effect, TestContext, pipe } from "effect";
-import * as effectIt from "effect-test/utils/extend";
+import { Effect, pipe } from "effect";
 
-import { afterEach, assert, beforeEach, describe, it, vitest } from "vitest";
+import { assert, describe, it } from "vitest";
 
 describe("bug", () => {
-  beforeEach(() => {
-    vitest.useFakeTimers();
-  });
-  afterEach(() => {
-    vitest.useRealTimers();
-  });
-  effectIt.effect(`initial test`, () =>
-    Effect.gen(function* (_) {
+  it(`errors work properly with async`, async () => {
+    const t = async () => {
       assert.deepEqual(["123"], ["234"]);
-
-      // Adjust the TestClock by 10 seconds
-      // yield* _(TestClock.adjust("10 seconds"))
-      // assert.strictEqual(actual, expected)
-    }).pipe(Effect.provide(TestContext.TestContext))
-  );
-  it(`test2`, async () => {
+    };
+    await t();
+  });
+  it(`fails to return expected or actual when using an Effect`, async () => {
+    await pipe(
+      Effect.sync(() => assert.deepEqual(["123"], ["234"])),
+      Effect.runPromise
+    );
+  });
+  it(`fails to return expected or actual when using an Effect generator`, async () => {
     await pipe(
       Effect.gen(function* (_) {
         assert.deepEqual(["123"], ["234"]);
